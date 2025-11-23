@@ -1,4 +1,4 @@
-export * from "./connect-mongo";
+export * from "./get-my-ip";
 export * from "./jwt";
 export * from "./logger";
 export * from "./multer";

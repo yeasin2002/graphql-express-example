@@ -50,6 +50,10 @@ app.get("/api-docs.json", (_req, res) => {
   res.send(openApiDocument);
 });
 
+// GraphQL endpoint
+import { yogaServer } from "@/graphql/server";
+app.use("/graphql", yogaServer);
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 
@@ -60,6 +64,7 @@ app.listen(port, async () => {
   console.log(`🚀 Server is running on port http://localhost:${port}`);
   console.log(`✨ Server is running on port http://${getLocalIP()}:${port} \n`);
 
-  console.log(`✍️ Swagger doc: http://localhost:${port}/swagger`);
-  console.log(`📋 Scaler doc: http://localhost:${port}/scaler \n`);
+  	console.log(`✍️ Swagger doc: http://localhost:${port}/swagger`);
+	console.log(`📋 Scaler doc: http://localhost:${port}/scaler`);
+  console.log(`🎨 GraphQL playground: http://localhost:${port}/graphql \n`);
 });
