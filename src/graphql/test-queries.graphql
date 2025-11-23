@@ -1,0 +1,396 @@
+# ========================================
+# GraphQL Test Queries & Mutations
+# ========================================
+# Use these in GraphQL Playground at: http://localhost:4000/graphql
+#
+# Notes:
+# - Queries marked with 🔐 require authentication (Authorization header)
+# - Replace placeholder values like <ID>, <EMAIL>, etc. with actual values
+# - For protected queries, add HTTP header: {"Authorization": "Bearer YOUR_ACCESS_TOKEN"}
+#
+# ========================================
+
+# ========================================
+# MUTATIONS - Authentication
+# ========================================
+
+# 1️⃣ Register a new user (Customer)
+mutation RegisterCustomer {
+  register(input: {
+    email: "customer@example.com"
+    password: "SecurePass123!"
+    name: "John Customer"
+    role: CUSTOMER
+    phone: "+1234567890"
+  }) {
+    success
+    message
+  }
+}
+
+# 2️⃣ Register a new user (Contractor)
+mutation RegisterContractor {
+  register(input: {
+    email: "contractor@example.com"
+    password: "SecurePass123!"
+    name: "Jane Contractor"
+    role: CONTRACTOR
+    phone: "+0987654321"
+  }) {
+    success
+    message
+  }
+}
+
+# 3️⃣ Register a new user (Admin)
+mutation RegisterAdmin {
+  register(input: {
+    email: "admin@example.com"
+    password: "AdminPass123!"
+    name: "Admin User"
+    role: ADMIN
+  }) {
+    success
+    message
+  }
+}
+
+# 4️⃣ Login user
+mutation Login {
+  login(input: {
+    email: "customer@example.com"
+    password: "SecurePass123!"
+  }) {
+    accessToken
+    refreshToken
+    user {
+      id
+      email
+      name
+      role
+      phone
+      isSuspend
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+# ========================================
+# QUERIES - User Data
+# ========================================
+
+# 5️⃣ Get all users 🔐 (Requires authentication)
+# Add header: {"Authorization": "Bearer YOUR_ACCESS_TOKEN"}
+query GetAllUsers {
+  users {
+    id
+    email
+    name
+    role
+    phone
+    isSuspend
+    createdAt
+    updatedAt
+  }
+}
+
+# 6️⃣ Get user by ID
+# Replace <ID> with actual user ID (e.g., "1")
+query GetUserById {
+  user(id: "1") {
+    id
+    email
+    name
+    role
+    phone
+    isSuspend
+    createdAt
+    updatedAt
+  }
+}
+
+# 7️⃣ Get current authenticated user 🔐
+# Add header: {"Authorization": "Bearer YOUR_ACCESS_TOKEN"}
+query GetMe {
+  me {
+    id
+    email
+    name
+    role
+    phone
+    isSuspend
+    createdAt
+    updatedAt
+  }
+}
+
+# ========================================
+# MUTATIONS - User Management
+# ========================================
+
+# 8️⃣ Update user profile 🔐
+# Replace <ID> with your user ID
+# Add header: {"Authorization": "Bearer YOUR_ACCESS_TOKEN"}
+mutation UpdateUser {
+  updateUser(
+    id: "1"
+    input: {
+      name: "Updated Name"
+      phone: "+1111111111"
+    }
+  ) {
+    id
+    email
+    name
+    role
+    phone
+    isSuspend
+    createdAt
+    updatedAt
+  }
+}
+
+# 9️⃣ Delete user 🔐
+# Replace <ID> with your user ID
+# Add header: {"Authorization": "Bearer YOUR_ACCESS_TOKEN"}
+mutation DeleteUser {
+  deleteUser(id: "1") {
+    success
+    message
+  }
+}
+
+# ========================================
+# COMBINED QUERIES (Multiple operations)
+# ========================================
+
+# 🔟 Get user details and all users (with authentication)
+query GetUserAndAllUsers {
+  me {
+    id
+    name
+    email
+    role
+  }
+  users {
+    id
+    name
+    email
+    role
+  }
+}
+
+# ========================================
+# EXAMPLE USAGE WORKFLOW
+# ========================================
+
+# Step 1: Register a new user
+# Run mutation #1 (RegisterCustomer)
+
+# Step 2: Login to get tokens
+# Run mutation #4 (Login)
+# Copy the accessToken from response
+
+# Step 3: Add Authorization header in GraphQL Playground
+# Click "HTTP HEADERS" at bottom and add:
+# {
+#   "Authorization": "Bearer YOUR_ACCESS_TOKEN_HERE"
+# }
+
+# Step 4: Test protected queries
+# Run query #7 (GetMe)
+# Run query #5 (GetAllUsers)
+
+# Step 5: Update your profile
+# Run mutation #8 (UpdateUser) with your user ID
+
+# ========================================
+# ADVANCED QUERIES WITH VARIABLES
+# ========================================
+
+# Query with variables for user by ID
+query GetUserByIdWithVar($userId: ID!) {
+  user(id: $userId) {
+    id
+    email
+    name
+    role
+    phone
+    isSuspend
+    createdAt
+    updatedAt
+  }
+}
+
+# Query Variables (paste in "Query Variables" section):
+# {
+#   "userId": "1"
+# }
+
+# Login with variables
+mutation LoginWithVar($email: String!, $password: String!) {
+  login(input: {
+    email: $email
+    password: $password
+  }) {
+    accessToken
+    refreshToken
+    user {
+      id
+      email
+      name
+      role
+    }
+  }
+}
+
+# Query Variables:
+# {
+#   "email": "customer@example.com",
+#   "password": "SecurePass123!"
+# }
+
+# Register with variables
+mutation RegisterWithVar($input: RegisterInput!) {
+  register(input: $input) {
+    success
+    message
+  }
+}
+
+# Query Variables:
+# {
+#   "input": {
+#     "email": "newuser@example.com",
+#     "password": "Password123!",
+#     "name": "New User",
+#     "role": "CUSTOMER",
+#     "phone": "+1234567890"
+#   }
+# }
+
+# Update user with variables
+mutation UpdateUserWithVar($id: ID!, $input: UpdateUserInput!) {
+  updateUser(id: $id, input: $input) {
+    id
+    name
+    phone
+    updatedAt
+  }
+}
+
+# Query Variables:
+# {
+#   "id": "1",
+#   "input": {
+#     "name": "Updated Name",
+#     "phone": "+9999999999"
+#   }
+# }
+
+# ========================================
+# TESTING SCENARIOS
+# ========================================
+
+# ❌ Test Error: Register with existing email
+mutation TestDuplicateEmail {
+  register(input: {
+    email: "customer@example.com"
+    password: "test123"
+    name: "Test User"
+    role: CUSTOMER
+  }) {
+    success
+    message
+  }
+}
+# Expected: Error "User with this email already exists"
+
+# ❌ Test Error: Login with wrong password
+mutation TestWrongPassword {
+  login(input: {
+    email: "customer@example.com"
+    password: "WrongPassword"
+  }) {
+    accessToken
+    refreshToken
+    user { id }
+  }
+}
+# Expected: Error "Invalid email or password"
+
+# ❌ Test Error: Access protected query without auth
+query TestNoAuth {
+  me {
+    id
+    name
+  }
+}
+# Expected: Error "Not authenticated" (without Authorization header)
+
+# ========================================
+# INTROSPECTION QUERIES (Schema exploration)
+# ========================================
+
+# Get all available types
+query GetSchema {
+  __schema {
+    types {
+      name
+      kind
+      description
+    }
+  }
+}
+
+# Get User type details
+query GetUserType {
+  __type(name: "User") {
+    name
+    kind
+    fields {
+      name
+      type {
+        name
+        kind
+      }
+    }
+  }
+}
+
+# Get all available queries
+query GetAllQueries {
+  __schema {
+    queryType {
+      fields {
+        name
+        description
+        args {
+          name
+          type {
+            name
+          }
+        }
+      }
+    }
+  }
+}
+
+# Get all available mutations
+query GetAllMutations {
+  __schema {
+    mutationType {
+      fields {
+        name
+        description
+        args {
+          name
+          type {
+            name
+          }
+        }
+      }
+    }
+  }
+}

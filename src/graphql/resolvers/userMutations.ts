@@ -1,9 +1,9 @@
 import { db, usersTable } from "@/db";
 import {
-  comparePassword,
-  hashPassword,
-  signAccessToken,
-  signRefreshToken,
+    comparePassword,
+    hashPassword,
+    signAccessToken,
+    signRefreshToken,
 } from "@/lib/jwt";
 import { eq } from "drizzle-orm";
 import { GraphQLError } from "graphql";
@@ -52,12 +52,12 @@ export const userMutations = {
     // Hash password
     const hashedPassword = await hashPassword(password);
 
-    // Create user
+    // Create user (convert GraphQL enum to lowercase for database)
     await db.insert(usersTable).values({
       email,
       password: hashedPassword,
       name,
-      role,
+      role: role.toLowerCase() as "customer" | "contractor" | "admin",
       phone,
     });
 
