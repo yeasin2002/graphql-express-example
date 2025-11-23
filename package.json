@@ -11,6 +11,8 @@
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/app.ts --outfile server",
     "prepare": "husky",
     "check": "oxlint",
+    "lint": "oxlint",
+    "test": "echo \"No tests configured yet\" && exit 0",
     "ruler:apply": "pnpm dlx @intellectronica/ruler@latest apply --local-only",
     "generate:module": "node script/generate-module.js",
     "format": "biome format --write ./src",
