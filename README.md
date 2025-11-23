@@ -16,28 +16,45 @@ Backend API for JobSphere - a mobile marketplace connecting customers with local
 
 ## Key Features
 
+- **GraphQL API** with type-safe queries and mutations
+- **REST API** with OpenAPI/Swagger documentation
 - JWT authentication with access/refresh tokens
 - Role-based access (Customer, Contractor, Admin)
+- **Drizzle ORM** with Neon PostgreSQL database
 - Real-time chat between users
 - Push notifications for mobile app with Firebase
 - Stripe payment processing with escrow
 - File upload system
 - OTP-based password recovery
 
+## 📚 Documentation
+
+**Complete documentation is available in the [`doc/`](./doc) directory:**
+
+- **[Getting Started Guide](./doc/getting-started.md)** - Setup, installation, and quick start
+- **[GraphQL API Reference](./doc/graphql-api.md)** - Complete GraphQL API documentation
+- **[Database Guide](./doc/database.md)** - Drizzle ORM and database operations
+- **[Documentation Index](./doc/README.md)** - Full documentation overview
+
+**Quick Links:**
+- GraphQL Playground: `http://localhost:4000/graphql`
+- Swagger Docs: `http://localhost:4000/swagger`
+- Scalar Docs: `http://localhost:4000/scaler`
+
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
-- Bun package manager
-- Drizzle 
+- pnpm package manager v10.18.3+
+- Neon PostgreSQL database (for Drizzle ORM)
 - Stripe account (for payments)
 - Firebase project (for notifications)
 
 ### Installation
 
 ```bash
-bun install
+pnpm install
 ```
 
 ### Environment Setup
@@ -85,22 +102,32 @@ FCM_PROJECT_ID=...
 ### Development
 
 ```bash
-bun dev          # Start with hot reload
-bun dev:b        # Start with Bun hot reload
+pnpm dev          # Start with hot reload
+pnpm dev:b        # Start with Bun hot reload (alternative)
 ```
 
 ### Production
 
 ```bash
-bun build        # Build the project
-bun start        # Start production server
+pnpm build        # Build the project
+pnpm start        # Start production server
+```
+
+### Database Commands
+
+```bash
+pnpm db:push      # Push schema to database (development)
+pnpm db:generate  # Generate migration files
+pnpm db:migrate   # Apply migrations (production)
+pnpm db:studio    # Open Drizzle Studio
 ```
 
 ### Code Quality
 
 ```bash
-bun check        # Run oxlint
-bun check-types  # TypeScript type checking
+pnpm check        # Run oxlint
+pnpm check-types  # TypeScript type checking
+pnpm format       # Format code with Biome
 ```
 
 ### Module Generator
@@ -108,7 +135,7 @@ bun check-types  # TypeScript type checking
 Quickly scaffold new API modules with boilerplate code:
 
 ```bash
-bun run generate:module
+pnpm generate:module
 ```
 
 This will prompt for a module name and create:
