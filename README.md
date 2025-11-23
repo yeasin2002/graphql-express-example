@@ -6,7 +6,7 @@ Backend API for JobSphere - a mobile marketplace connecting customers with local
 
 - **Runtime**: Node.js with TypeScript
 - **Framework**: Express.js v5.1.0
-- **Database**: MongoDB with Mongoose ODM
+- **Database**: Drizzle and Neon
 - **Package Manager**: Bun
 - **Authentication**: JWT with refresh token rotation
 - **Real-Time**: Socket.IO for WebSocket chat
@@ -30,7 +30,7 @@ Backend API for JobSphere - a mobile marketplace connecting customers with local
 
 - Node.js 18+
 - Bun package manager
-- MongoDB instance
+- Drizzle 
 - Stripe account (for payments)
 - Firebase project (for notifications)
 
@@ -50,7 +50,7 @@ PORT=4000
 NODE_ENV=development
 
 # Database
-MONGODB_URI=mongodb://localhost:27017/jobsphere
+DATABASE_URL=
 
 # JWT
 JWT_ACCESS_SECRET=your_access_secret
